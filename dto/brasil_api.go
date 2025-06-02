@@ -16,10 +16,6 @@ type BrasilAPIResponse struct {
 	Service      string `json:"service"`
 }
 
-type BrasilAPIInput struct {
-	Cep string `json:"cep"`
-}
-
 func (b BrasilAPIResponse) Validate() error {
 	if b.Cep == "" {
 		return default_errors.ErrInvalidCep
@@ -62,23 +58,4 @@ func (b BrasilAPIResponse) ToAddress() Address {
 		City:         b.City,
 		State:        b.State,
 	}
-}
-
-func (b BrasilAPIInput) Validate() error {
-	if b.Cep == "" {
-		return default_errors.ErrInvalidCep
-	}
-	if len(b.Cep) < 8 || len(b.Cep) > 9 {
-		return default_errors.ErrInvalidCep
-	}
-	for _, char := range b.Cep {
-		if char < '0' || char > '9' {
-			return default_errors.ErrInvalidCep
-		}
-	}
-	return nil
-}
-
-func (b BrasilAPIInput) GetCep() string {
-	return strings.Replace(b.Cep, "-", "", -1)
 }

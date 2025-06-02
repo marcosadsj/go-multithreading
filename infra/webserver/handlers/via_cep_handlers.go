@@ -22,9 +22,13 @@ func NewViaCepHandlerHandler(baseURL string, ch chan<- dto.Address) *ViaCepHandl
 	}
 }
 
-func (v *ViaCepHandler) GetAddressByCep(cep string) (address dto.Address, err error) {
+func (v *ViaCepHandler) GetAddressByCep(cepInput dto.CepInput) (address dto.Address, err error) {
 
-	requestURL := v.FullURLWithCep(cep)
+	if err := cepInput.Validate(); err != nil {
+		return dto.Address{}, err
+	}
+
+	requestURL := v.FullURLWithCep(cepInput.GetCep())
 
 	response, err := http.Get(requestURL)
 

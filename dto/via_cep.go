@@ -23,10 +23,6 @@ type ViaCEPResponse struct {
 	Siafi       string `json:"siafi"`
 }
 
-type ViaCEPInput struct {
-	Cep string `json:"cep"`
-}
-
 func (v ViaCEPResponse) Validate() error {
 	if v.Cep == "" {
 		return default_errors.ErrInvalidCep
@@ -78,23 +74,4 @@ func (v ViaCEPResponse) ToAddress() Address {
 		City:         v.Localidade,
 		State:        v.Uf,
 	}
-}
-
-func (v ViaCEPInput) Validate() error {
-	if v.Cep == "" {
-		return default_errors.ErrInvalidCep
-	}
-	if len(v.Cep) < 8 || len(v.Cep) > 9 {
-		return default_errors.ErrInvalidCep
-	}
-	for _, char := range v.GetCep() {
-		if char < '0' || char > '9' {
-			return default_errors.ErrInvalidCep
-		}
-	}
-	return nil
-}
-
-func (v ViaCEPInput) GetCep() string {
-	return strings.Replace(v.Cep, "-", "", -1)
 }

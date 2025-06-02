@@ -24,8 +24,13 @@ func NewBrasilAPIHandler(baseURL string, ch chan<- dto.Address) *BrasilAPIHandle
 	}
 }
 
-func (b *BrasilAPIHandler) GetAddressByCep(cep string) (address dto.Address, err error) {
-	requestURL := b.BaseURL + "/" + cep
+func (b *BrasilAPIHandler) GetAddressByCep(cepInput dto.CepInput) (address dto.Address, err error) {
+
+	if err := cepInput.Validate(); err != nil {
+		return dto.Address{}, err
+	}
+
+	requestURL := b.BaseURL + "/" + cepInput.GetCep()
 
 	response, err := http.Get(requestURL)
 
