@@ -7,19 +7,24 @@ import (
 	"net/http"
 )
 
-type BrasilAPI struct {
+type BrasilAPIHandler struct {
 	BaseURL string
 	Chan    chan<- dto.Address
 }
 
-func NewBrasilAPI(baseURL string, ch chan<- dto.Address) *BrasilAPI {
-	return &BrasilAPI{
+func (b *BrasilAPIHandler) FullURLWithCep(cep string) string {
+
+	return b.BaseURL + "/" + cep
+}
+
+func NewBrasilAPIHandler(baseURL string, ch chan<- dto.Address) *BrasilAPIHandler {
+	return &BrasilAPIHandler{
 		BaseURL: baseURL,
 		Chan:    ch,
 	}
 }
 
-func (b *BrasilAPI) GetAddressByCep(cep string) (address dto.Address, err error) {
+func (b *BrasilAPIHandler) GetAddressByCep(cep string) (address dto.Address, err error) {
 	requestURL := b.BaseURL + "/" + cep
 
 	response, err := http.Get(requestURL)

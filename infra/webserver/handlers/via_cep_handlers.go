@@ -6,21 +6,25 @@ import (
 	"net/http"
 )
 
-type ViaCep struct {
+type ViaCepHandler struct {
 	BaseURL string
 	Chan    chan<- dto.Address
 }
 
-func NewViaCep(baseURL string, ch chan<- dto.Address) *ViaCep {
-	return &ViaCep{
+func (v *ViaCepHandler) FullURLWithCep(cep string) string {
+	return v.BaseURL + cep + "/json/"
+}
+
+func NewViaCepHandlerHandler(baseURL string, ch chan<- dto.Address) *ViaCepHandler {
+	return &ViaCepHandler{
 		BaseURL: baseURL,
 		Chan:    ch,
 	}
 }
 
-func (v *ViaCep) GetAddressByCep(cep string) (address dto.Address, err error) {
+func (v *ViaCepHandler) GetAddressByCep(cep string) (address dto.Address, err error) {
 
-	requestURL := v.BaseURL + cep + "/json/"
+	requestURL := v.FullURLWithCep(cep)
 
 	response, err := http.Get(requestURL)
 
