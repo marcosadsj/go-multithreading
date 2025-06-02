@@ -37,9 +37,9 @@ func main() {
 
 	select {
 	case address1 := <-brasilApiChan:
-		fmt.Println("Address from Brasil API:", address1)
+		fmt.Println("Address from Brasil API: ", address1)
 	case address2 := <-viaCepChan:
-		fmt.Println("Address from ViaCEP:", address2)
+		fmt.Println("Address from ViaCEP: ", address2)
 	case <-time.After(1 * time.Second):
 		fmt.Println("Timeout: No address received within 1 second")
 		return
